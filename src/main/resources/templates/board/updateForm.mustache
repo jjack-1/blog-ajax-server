@@ -1,23 +1,51 @@
 {{> layout/header}}
 
 <div class="container p-5">
-    <div class="card">
-        <div class="card-header"><b>익명 글수정 화면입니다</b></div>
-        <div class="card-body">
-            <form action="#">
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter author" name="author">
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter title" name="title">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" rows="5" name="content"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary form-control">글수정완료</button>
-            </form>
-        </div>
-    </div>
+	<div class="card">
+		<div class="card-header"><b>익명 글수정 화면입니다</b></div>
+		<div class="card-body">
+			<form action="#">
+				<input type="hidden" id="boardId" value="{{boardId}}"/>
+				<div class="mb-3">
+					<input type="text" class="form-control" placeholder="Enter author" id="author">
+				</div>
+				<div class="mb-3">
+					<input type="text" class="form-control" placeholder="Enter title" id="title">
+				</div>
+				<div class="mb-3">
+					<textarea class="form-control" rows="5" id="content"></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary form-control">글수정완료</button>
+			</form>
+		</div>
+	</div>
 </div>
+
+<script>
+	let boardId = document.querySelector("#boardId").value; // html에 있는 id가져오는 방법
+	let boardId2 = getCookie("boardId"); // 쿠키에서 id가져오는 방법
+
+	function getCookie(key) {
+		const cookies = document.cookie.split('; ');
+		for (let cookie of cookies) {
+			const [k, v] = cookie.split('=');
+			if (k === key) {
+				return v;
+			}
+		}
+		return null; // 해당 키가 없으면 null 반환
+	}
+
+	// 책임: 통신
+	async function init() {
+		let response = await fetch("/api/boards/" + boardId2);
+		let responseBody = await response.json();
+		document.querySelector("#author").value = responseBody.body.author;
+		document.querySelector("#title").value = responseBody.body.title;
+		document.querySelector("#content").value = responseBody.body.content;
+	}
+
+	init();
+</script>
 
 {{> layout/footer}}
