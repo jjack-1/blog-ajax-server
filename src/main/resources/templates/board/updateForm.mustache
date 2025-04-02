@@ -15,7 +15,7 @@
 				<div class="mb-3">
 					<textarea class="form-control" rows="5" id="content"></textarea>
 				</div>
-				<button type="submit" class="btn btn-primary form-control">글수정완료</button>
+				<button type="button" onclick="put1()" class="btn btn-primary form-control">글수정완료</button>
 			</form>
 		</div>
 	</div>
@@ -25,6 +25,29 @@
 	let boardId = document.querySelector("#boardId").value; // html에 있는 id가져오는 방법
 	let boardId2 = getCookie("boardId"); // 쿠키에서 id가져오는 방법
 
+	let inputAuthor = document.querySelector("#author");
+	let inputTitle = document.querySelector("#title");
+	let inputContent = document.querySelector("#content");
+
+	// 책임: 통신
+	async function put1() {
+		let requestBody = {
+			author: inputAuthor.value,
+			title: inputTitle.value,
+			content: inputContent.value
+		}
+		let response = await fetch("/api/boards/" + boardId, {
+			method: "put",
+			headers: {"Content-Type": "application/json"},
+			body: JSON.stringify(requestBody)
+		});
+
+		let responseBody = await response.json();
+
+		location.href = "/"
+	}
+
+	// 쿠키에서 key에 대한 값 리턴
 	function getCookie(key) {
 		const cookies = document.cookie.split('; ');
 		for (let cookie of cookies) {
@@ -40,10 +63,9 @@
 	async function init() {
 		let response = await fetch("/api/boards/" + boardId);
 		let responseBody = await response.json();
-		console.log(responseBody)
-		document.querySelector("#author").value = responseBody.body.author;
-		document.querySelector("#title").value = responseBody.body.title;
-		document.querySelector("#content").value = responseBody.body.content;
+		inputAuthor.value = responseBody.body.author;
+		inputTitle.value = responseBody.body.title;
+		inputContent.value = responseBody.body.content;
 	}
 
 	init();
