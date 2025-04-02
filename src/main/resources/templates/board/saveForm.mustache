@@ -1,23 +1,50 @@
 {{> layout/header}}
 
 <div class="container p-5">
-    <div class="card">
-        <div class="card-header"><b>익명 글쓰기 화면입니다</b></div>
-        <div class="card-body">
-            <form action="#">
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter author" name="author">
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Enter title" name="title">
-                </div>
-                <div class="mb-3">
-                    <textarea class="form-control" rows="5" name="content"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary form-control">글쓰기완료</button>
-            </form>
-        </div>
-    </div>
+	<div class="card">
+		<div class="card-header"><b>익명 글쓰기 화면입니다</b></div>
+		<div class="card-body">
+			<form action="#">
+				<div class="mb-3">
+					<input type="text" class="form-control" placeholder="Enter author" id="author">
+				</div>
+				<div class="mb-3">
+					<input type="text" class="form-control" placeholder="Enter title" id="title">
+				</div>
+				<div class="mb-3">
+					<textarea class="form-control" rows="5" id="content"></textarea>
+				</div>
+				<button type="button" onclick="writeBoard()" class="btn btn-primary form-control">글쓰기완료</button>
+			</form>
+		</div>
+	</div>
 </div>
+<script>
+	// 아래 함수 작성하기 전에,
+	// 1. button -> type button으로!!
+	// 2. input name을 id로 변경하기
+	async function writeBoard() {
+		// 1. id 값 찾아서 requestBody 오브젝트에 넣기
+		let requestBody = {
+			title: document.querySelector("#title").value,
+			content: document.querySelector("#content").value,
+			author: document.querySelector("#author").value
+		}
 
+		// 2. fetch post 요청하기
+		let response = await fetch("/api/boards", {
+			method: "post",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(requestBody)
+		})
+
+		let responseBody = await response.json();
+		console.log(responseBody);
+
+		// 3. 마지막에 아래 코드로 페이지 이동하기
+		location.href = "/";
+	}
+</script>
 {{> layout/footer}}

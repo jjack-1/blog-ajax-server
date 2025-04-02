@@ -38,8 +38,9 @@
 
 	// 책임: 통신
 	async function init() {
-		let response = await fetch("/api/boards/" + boardId2);
+		let response = await fetch("/api/boards/" + boardId);
 		let responseBody = await response.json();
+		console.log(responseBody)
 		document.querySelector("#author").value = responseBody.body.author;
 		document.querySelector("#title").value = responseBody.body.title;
 		document.querySelector("#content").value = responseBody.body.content;
