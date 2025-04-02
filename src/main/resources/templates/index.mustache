@@ -42,6 +42,17 @@
 	}
 
 	// 책임: 통신
+	async function delBoard(boardId) {
+		let response = await fetch("/api/boards/" + boardId, {
+			method: "delete"
+		});
+
+		let responseBody = await response.json();
+		console.log(responseBody)
+		location.reload();
+	}
+
+	// 책임: 통신
 	async function init() {
 		let response = await fetch("/api/boards");
 		let responseBody = await response.json();
