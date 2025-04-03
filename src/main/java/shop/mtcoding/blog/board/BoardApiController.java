@@ -25,7 +25,7 @@ public class BoardApiController {
     }
 
     @DeleteMapping("/api/boards/{id}")
-    public ApiUtil<?> deleteById(@PathVariable Integer id) {
+    public ApiUtil<?> deleteById(@PathVariable("id") Integer id) {
         Board board = boardRepository.selectOne(id);
         boardRepository.deleteById(id);
         return new ApiUtil<>(null);

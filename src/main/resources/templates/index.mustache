@@ -22,6 +22,7 @@
 	// 책임: 컴포넌트 생성
 	function makeBoard(board) {
 		let tr = document.createElement("tr");
+		tr.setAttribute("id", `board-${board.id}`);
 		tr.innerHTML = `
 			<td>${board.id}</td>
 			<td>${board.title}</td>
@@ -29,8 +30,8 @@
 			<td>${board.author}</td>
 			<td>
 				<div class="d-flex">
-					<form action="#">
-						<button class="btn btn-danger" onclick="delBoard(${board.id})">삭제</button>
+					<form>
+						<button type="button" class="btn btn-danger" onclick="delBoard(${board.id})">삭제</button>
 					</form>
 					<form action="/board/${board.id}/updateForm" method="get">
 						<button class="btn btn-warning">수정</button>
@@ -49,7 +50,10 @@
 
 		let responseBody = await response.json();
 		console.log(responseBody)
-		location.reload();
+		// location.reload(); // 페이지 새로고침
+
+		let tr = document.querySelector(`#board-${boardId}`);
+		tr.remove();
 	}
 
 	// 책임: 통신
